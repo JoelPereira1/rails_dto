@@ -41,5 +41,12 @@ module UsrSync
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Packwerk needs each pack to be an autoload root
+    # config.paths.add "app/packages", glob: "*/{*,*/concerns}", eager_load: true
+
+    # config.autoloaders.main.push_dir Rails.root.join("packs/users"),          namespace: Users
+    # config.autoloaders.main.push_dir Rails.root.join("packs/roles"),          namespace: Roles
+    # config.autoloaders.main.push_dir Rails.root.join("packs/user_role_sync"), namespace: UserRoleSync
   end
 end

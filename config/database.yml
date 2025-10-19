@@ -23,9 +23,18 @@ default: &default
   host: <%= ENV["PGHOST"] || "localhost" %>
 
 
+# development:
+#   <<: *default
+#   database: usr_sync_development
+
 development:
-  <<: *default
-  database: usr_sync_development
+  primary:
+    <<: *default
+    database: rails_dto_users_dev
+  roles:
+    <<: *default
+    database: rails_dto_roles_dev
+    migrations_paths: db/roles_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.

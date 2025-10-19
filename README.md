@@ -31,4 +31,34 @@ Things you may want to cover:
 for testing the dto usage via console we can mock a keycloak request like
 payload = {"sub"=>"abc-123","email"=>"USER@EXAMPLE.com","name"=>"Jane Doe","locale"=>"pt","enabled"=>true}
 and call the service
-Users::UpsertFromIdp.new.call(payload)
+Idp::UpsertFromIdp.new.call(payload)
+
+
+
+cat > db/roles_migrate/20251019120000_create_roles.rb <<'RUBY'
+class CreateRoles < ActiveRecord::Migration[7.1]
+  def change
+    create_table :roles do |t|
+      t.string :role_key, null: false
+      t.string :name,     null: false
+      t.timestamps
+    end
+
+    add_index :roles, :role_key, unique: true
+  end
+end
+RUBY
+
+
+bin/rails r 'Roles::Role.upsert_all([{role_key: "admin", name: "Admin"}, {role_key: "user", name: "User"}], unique_by: :role_key)'
+
+UserRoleSync::AssignRole.new.call(external_id: "abc-123", role_name: "Admin")
+
+
+bin/spring stop || true
+bin/rails zeitwerk:check
+bin/packwerk validate
+bin/packwerk check
+bin/packwerk validate
+
+bundle exec rake graphwerk:update

@@ -1,12 +1,11 @@
 require "dry/monads"
 require "dry/monads/do"
 
-class Users::UpsertFromIdp
+class Idp::UpsertFromIdp
   include Dry::Monads[:result, :try]
   include Dry::Monads::Do.for(:call)
 
-  def initialize(repo: UserRepo.new, contract: UserUpsertContract.new)
-    @repo = repo
+  def initialize(contract: UserUpsertContract.new)
     @contract = contract
   end
 
@@ -25,7 +24,7 @@ class Users::UpsertFromIdp
   end
 
   def build_dto(hash)
-    Try { UserUpsertDto.new(hash) }.to_result.or { |e| Failure[:dto_error, error: e.message] }
+    Try { ::UserUpsertDto.new(hash) }.to_result.or { |e| Failure[:dto_error, error: e.message] }
   end
 
   def validate(dto)
@@ -41,7 +40,7 @@ class Users::UpsertFromIdp
 
   def upsert(dto)
     Try do
-      @repo.upsert_by_external_id(
+      ::Users::Public::Api.upsert_by_external_id(
         external_id: dto.external_id,
         email: dto.normalized_email,
         name: dto.name,

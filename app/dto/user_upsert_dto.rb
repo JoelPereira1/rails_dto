@@ -1,5 +1,4 @@
 require "dry-struct"
-require_relative "types"
 
 class UserUpsertDto < Dry::Struct
   attribute :external_id, Types::String

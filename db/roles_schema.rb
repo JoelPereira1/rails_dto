@@ -10,27 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_19_171100) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "roles", force: :cascade do |t|
-    t.string "role_key"
-    t.string "name"
+    t.string "role_key", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["role_key"], name: "index_roles_on_role_key", unique: true
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "external_id"
-    t.string "email"
-    t.string "name"
-    t.string "locale"
-    t.boolean "active"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email"
-    t.index ["external_id"], name: "index_users_on_external_id"
   end
 end
