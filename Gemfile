@@ -49,8 +49,8 @@ end
 # test porpouses
 gem "pundit"
 
-gem "packwerk", group: [:development, :test]
-gem 'graphwerk', group: %i[development test]
+gem "packwerk", group: %i[development, test]
+gem "graphwerk", group: %i[development test]
 
 gem "dry-types"
 gem "dry-struct"
